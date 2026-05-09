@@ -1,15 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Icon } from '../../../components/ui';
 import { ToastProvider, Button } from "../../../components/ui/index";
 import { notify } from '../../../util/notify';
 
-interface AddSitioModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface SitioData {
+  id: number;
+  name: string;
+  address: string;
+  logo: string | null;
 }
 
-export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose }) => {
+interface EditSitioModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  sitio: SitioData | null;
+}
+
+export const EditSitioModal: React.FC<EditSitioModalProps> = ({ isOpen, onClose, sitio }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -18,13 +26,24 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
     imagePreview: '' as string
   });
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (sitio) {
+      setFormData({
+        name: sitio.name,
+        address: sitio.address,
+        image: null,
+        imagePreview: sitio.logo ? `http://127.0.0.1:8000/storage/${sitio.logo}` : ''
+      });
+    }
+  }, [sitio, isOpen]);
+
+  if (!isOpen || !sitio) return null;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Cleanup previous preview if it exists
-      if (formData.imagePreview) {
+      // Cleanup previous object URL if it was created locally
+      if (formData.imagePreview && formData.imagePreview.startsWith('blob:')) {
         URL.revokeObjectURL(formData.imagePreview);
       }
       setFormData(prev => ({
@@ -47,33 +66,30 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
       if (formData.image) {
         formDataToSend.append('logo', formData.image);
       }
+      
+      // Laravel handles PUT with FormData via _method trick or using POST with _method
+      formDataToSend.append('_method', 'PUT');
 
-      // Using absolute URL for now, ideally this would be from config/env
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/sitios', formDataToSend, {
+      const response = await axios.post(`http://127.0.0.1:8000/api/v1/sitios/${sitio.id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      notify.success(response.data.message || 'Sitio created successfully!');
-      
-      // Reset and close after successful save
+      notify.success(response.data.message || 'Sitio updated successfully!');
       handleClose();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.message || 'Something went wrong!';
       notify.error(errorMessage);
-      console.error('Error submitting Sitio:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleClose = () => {
-    // Cleanup preview URL to prevent memory leaks
-    if (formData.imagePreview) {
+    if (formData.imagePreview && formData.imagePreview.startsWith('blob:')) {
       URL.revokeObjectURL(formData.imagePreview);
     }
-    setFormData({ name: '', address: '', image: null, imagePreview: '' });
     onClose();
   };
 
@@ -81,31 +97,27 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop - Matching MainLayout overlay style */}
       <div 
         className="absolute inset-0 bg-bg-dark/60 backdrop-blur-sm animate-in fade-in duration-300" 
         onClick={handleClose}
       />
       
-      {/* Modal Container */}
       <div className="relative w-full max-w-md bg-bg-light border border-border-muted rounded-[2rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
         <div className="p-8">
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-black uppercase italic tracking-tighter text-text">
-              Add New Sitio
+              Edit Sitio
             </h2>
             <Button 
               onClick={handleClose}
+              variant="ghost"
               className="p-2 text-text-muted hover:text-danger transition-colors cursor-pointer"
             >
               <Icon iconName="FaXmark" size={24} />
             </Button>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Image Upload */}
             <div className="flex flex-col items-center justify-center space-y-3 pb-2">
               <label className="text-xs font-black uppercase italic tracking-widest text-text-muted">
                 Sitio Logo
@@ -127,7 +139,7 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
                 />
               </div>
               <p className="text-[10px] font-black uppercase italic tracking-widest text-text-muted">
-                Click to upload logo
+                Click to change logo
               </p>
             </div>
 
@@ -159,7 +171,6 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
               />
             </div>
 
-            {/* Actions */}
             <div className="flex gap-3 pt-2">
               <Button 
                 type="button" 
@@ -173,12 +184,12 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
                 type="submit" 
                 variant="primary" 
                 isLoading={isLoading}
-                loadingText="Saving..."
+                loadingText="Updating..."
                 iconName="FaCloudArrowUp"
                 fullWidth
                 disabled={!isFormValid || isLoading}
               >
-                Save Sitio
+                Update Sitio
               </Button>
             </div>
             <ToastProvider />
