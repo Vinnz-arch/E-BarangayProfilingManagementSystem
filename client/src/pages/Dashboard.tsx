@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../util/axios";
 import { MainLayout } from "../components/layouts";
 import { LoadingSpinner, Icon } from "../components/ui";
 import { notify } from "../util/notify";
@@ -33,8 +33,8 @@ const Dashboard = () => {
         setIsLoading(true);
         try {
             const [residentsRes, sitiosRes] = await Promise.all([
-                axios.get("http://127.0.0.1:8000/api/v1/residents"),
-                axios.get("http://127.0.0.1:8000/api/v1/sitios")
+                api.get("/residents"),
+                api.get("/sitios")
             ]);
             setResidents(residentsRes.data);
             setSitios(sitiosRes.data);

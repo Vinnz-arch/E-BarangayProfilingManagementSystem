@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, LoadingSpinner, Icon } from "../../components/ui";
 import { AddSitioModal } from "./components/AddSitioModal";
@@ -25,7 +25,7 @@ const Sitio = () => {
     const fetchSitios = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/sitios");
+            const response = await api.get("/sitios");
             setSitios(response.data);
         } catch (error) {
             console.error("Error fetching sitios:", error);
@@ -52,7 +52,7 @@ const Sitio = () => {
         if (!window.confirm("Are you sure you want to delete this sitio?")) return;
 
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/api/v1/sitios/${id}`);
+            const response = await api.delete(`/sitios/${id}`);
             notify.success(response.data.message || "Sitio deleted successfully");
             fetchSitios();
         } catch (error: any) {

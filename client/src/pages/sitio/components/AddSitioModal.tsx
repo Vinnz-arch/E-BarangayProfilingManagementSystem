@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../../util/axios';
 import { Icon } from '../../../components/ui';
 import { ToastProvider, Button } from "../../../components/ui/index";
 import { notify } from '../../../util/notify';
@@ -7,9 +7,10 @@ import { notify } from '../../../util/notify';
 interface AddSitioModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose }) => {
+export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -23,7 +24,6 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Cleanup previous preview if it exists
       if (formData.imagePreview) {
         URL.revokeObjectURL(formData.imagePreview);
       }
@@ -48,8 +48,7 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
         formDataToSend.append('logo', formData.image);
       }
 
-      // Using absolute URL for now, ideally this would be from config/env
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/sitios', formDataToSend, {
+      const response = await api.post('/sitios', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -57,12 +56,11 @@ export const AddSitioModal: React.FC<AddSitioModalProps> = ({ isOpen, onClose })
 
       notify.success(response.data.message || 'Sitio created successfully!');
       
-      // Reset and close after successful save
+      if (onSuccess) onSuccess();
       handleClose();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.message || 'Something went wrong!';
       notify.error(errorMessage);
-      console.error('Error submitting Sitio:', error);
     } finally {
       setIsLoading(false);
     }

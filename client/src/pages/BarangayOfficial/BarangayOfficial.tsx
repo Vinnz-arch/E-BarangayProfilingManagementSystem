@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { LoadingSpinner, Icon, Button } from "../../components/ui";
 import { notify } from "../../util/notify";
@@ -27,7 +27,7 @@ const BarangayOfficial = () => {
     const fetchOfficials = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/officials");
+            const response = await api.get("/officials");
             setOfficials(response.data);
         } catch (error) {
             console.error("Error fetching officials:", error);
@@ -50,7 +50,7 @@ const BarangayOfficial = () => {
         if (!window.confirm("Are you sure you want to remove this official?")) return;
 
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/v1/officials/${id}`);
+            await api.delete(`/officials/${id}`);
             notify.success("Official removed successfully");
             fetchOfficials();
         } catch (error) {

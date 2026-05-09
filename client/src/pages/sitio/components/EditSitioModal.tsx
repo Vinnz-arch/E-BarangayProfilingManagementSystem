@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../util/axios';
 import { Icon } from '../../../components/ui';
 import { ToastProvider, Button } from "../../../components/ui/index";
 import { notify } from '../../../util/notify';
@@ -15,9 +15,10 @@ interface EditSitioModalProps {
   isOpen: boolean;
   onClose: () => void;
   sitio: SitioData | null;
+  onSuccess?: () => void;
 }
 
-export const EditSitioModal: React.FC<EditSitioModalProps> = ({ isOpen, onClose, sitio }) => {
+export const EditSitioModal: React.FC<EditSitioModalProps> = ({ isOpen, onClose, sitio, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -42,7 +43,6 @@ export const EditSitioModal: React.FC<EditSitioModalProps> = ({ isOpen, onClose,
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Cleanup previous object URL if it was created locally
       if (formData.imagePreview && formData.imagePreview.startsWith('blob:')) {
         URL.revokeObjectURL(formData.imagePreview);
       }
@@ -67,16 +67,16 @@ export const EditSitioModal: React.FC<EditSitioModalProps> = ({ isOpen, onClose,
         formDataToSend.append('logo', formData.image);
       }
       
-      // Laravel handles PUT with FormData via _method trick or using POST with _method
       formDataToSend.append('_method', 'PUT');
 
-      const response = await axios.post(`http://127.0.0.1:8000/api/v1/sitios/${sitio.id}`, formDataToSend, {
+      const response = await api.post(`/sitios/${sitio.id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
       notify.success(response.data.message || 'Sitio updated successfully!');
+      if (onSuccess) onSuccess();
       handleClose();
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || error.message || 'Something went wrong!';

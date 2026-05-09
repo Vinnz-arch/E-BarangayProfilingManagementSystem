@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { LoadingSpinner, Icon, Button } from "../../components/ui";
 import { ViewResidentModal } from "../sitio/components/ViewResidentModal";
@@ -37,7 +37,7 @@ const Beneficiaries = () => {
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/residents");
+            const response = await api.get("/residents");
             setResidents(response.data);
         } catch (error) {
             console.error("Error fetching beneficiaries:", error);

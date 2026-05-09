@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../util/axios';
 import { Icon } from '../../../components/ui';
 import { Button } from "../../../components/ui/index";
 import { notify } from '../../../util/notify';
@@ -69,7 +69,7 @@ export const EditOfficialModal: React.FC<EditOfficialModalProps> = ({ isOpen, on
         data.append('image', imageFile);
       }
 
-      const response = await axios.post(`http://127.0.0.1:8000/api/v1/officials/${official.id}`, data, {
+      const response = await api.post(`/officials/${official.id}`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

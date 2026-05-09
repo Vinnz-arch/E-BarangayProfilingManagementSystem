@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import axios from "axios";
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { LoadingSpinner, Icon, Button } from "../../components/ui";
 import { ViewResidentModal } from "../sitio/components/ViewResidentModal";
@@ -65,7 +65,7 @@ const HouseHold = () => {
                 is_household_type: '1', // Always filter by Head of Household
             };
 
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/residents", { params });
+            const response = await api.get("/residents", { params });
             
             const newHeads = response.data.data;
             if (isInitial) {

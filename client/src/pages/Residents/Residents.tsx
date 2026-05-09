@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, LoadingSpinner, Icon } from "../../components/ui";
 import { ViewResidentModal } from "../sitio/components/ViewResidentModal";
@@ -77,7 +77,7 @@ const Residents = () => {
             else if (programFilter === "solo") params.is_solo_parent = true;
             else if (programFilter === "senior") params.is_senior_citizen = true;
 
-            const response = await axios.get("http://127.0.0.1:8000/api/v1/residents", { params });
+            const response = await api.get("/residents", { params });
             
             const newResidents = response.data.data;
             if (isInitial) {
@@ -92,7 +92,7 @@ const Residents = () => {
 
             // Fetch sitios only if not already loaded
             if (sitios.length === 0) {
-                const sitiosRes = await axios.get("http://127.0.0.1:8000/api/v1/sitios");
+                const sitiosRes = await api.get("/sitios");
                 setSitios(sitiosRes.data);
             }
         } catch (error) {
@@ -136,7 +136,7 @@ const Residents = () => {
         if (!window.confirm("Are you sure you want to delete this resident?")) return;
 
         try {
-            await axios.delete(`http://127.0.0.1:8000/api/v1/residents/${residentId}`);
+            await api.delete(`/residents/${residentId}`);
             notify.success("Resident deleted successfully");
             fetchData(true);
         } catch (error) {

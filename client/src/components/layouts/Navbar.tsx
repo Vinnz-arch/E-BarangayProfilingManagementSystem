@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../routes/path";
 import { Icon } from "../ui";
-import Logo from "../../assets/react.svg";
+import Logo from "../../assets/logo.png";
 
 interface NavbarProps {
   onMenuClick: () => void;
@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
               <Icon iconName="FaAlignJustify" />
             </span>
             <Link to={PATHS.APP.DASHBOARD} className="flex gap-3 items-center">
-              <img src={Logo} alt="App Logo"/>
+              <img className="w-13 h-13" src={Logo} alt="App Logo"/>
               <span className="text-text font-black text-lg tracking-tighter uppercase italic hidden sm:block">E-Barangay Profiling Management System</span>
             </Link>
           </div>

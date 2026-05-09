@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, Icon, LoadingSpinner } from "../../components/ui";
 import { notify } from '../../util/notify';
@@ -40,8 +40,8 @@ const EditResident = () => {
       setIsPageLoading(true);
       try {
         const [sitioRes, residentRes] = await Promise.all([
-          axios.get(`http://127.0.0.1:8000/api/v1/sitios/${id}`),
-          axios.get(`http://127.0.0.1:8000/api/v1/residents/${residentId}`)
+          api.get(`/sitios/${id}`),
+          api.get(`/residents/${residentId}`)
         ]);
         
         setSitio(sitioRes.data);
@@ -86,7 +86,7 @@ const EditResident = () => {
 
     setIsLoading(true);
     try {
-      await axios.put(`http://127.0.0.1:8000/api/v1/residents/${residentId}`, formData);
+      await api.put(`/residents/${residentId}`, formData);
       notify.success('Resident updated successfully!');
       navigate(`/app/sitio/${id}/residents`);
     } catch (error: any) {

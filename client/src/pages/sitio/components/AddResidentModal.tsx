@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../../util/axios';
 import { Icon } from '../../../components/ui';
 import { Button } from "../../../components/ui/index";
 import { notify } from '../../../util/notify';
+
 
 interface AddResidentModalProps {
   isOpen: boolean;
@@ -48,7 +49,7 @@ export const AddResidentModal: React.FC<AddResidentModalProps> = ({ isOpen, onCl
         sitio_id: sitioId
       };
 
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/residents', payload);
+      const response = await api.post('/residents', payload);
       notify.success(response.data.message || 'Resident added successfully!');
       
       onSuccess();

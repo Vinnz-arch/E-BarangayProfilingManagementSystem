@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, Icon } from "../../components/ui";
 import { notify } from '../../util/notify';
@@ -37,7 +37,7 @@ const AddResident = () => {
   useEffect(() => {
     const fetchSitio = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/v1/sitios/${id}`);
+        const response = await api.get(`/sitios/${id}`);
         setSitio(response.data);
       } catch (error) {
         console.error("Error fetching sitio:", error);
@@ -62,7 +62,7 @@ const AddResident = () => {
         sitio_id: id
       };
 
-      await axios.post('http://127.0.0.1:8000/api/v1/residents', payload);
+      await api.post('/residents', payload);
       notify.success('Resident added successfully!');
       navigate(`/app/sitio/${id}/residents`);
     } catch (error: any) {
