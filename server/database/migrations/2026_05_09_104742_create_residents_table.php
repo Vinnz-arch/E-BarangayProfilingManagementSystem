@@ -38,6 +38,9 @@ return new class extends Migration
             // Government Programs / Status
             $table->boolean('is_4ps')->default(false);
             $table->boolean('is_pwd')->default(false);
+            $table->boolean('is_solo_parent')->default(false);
+            $table->boolean('is_senior_citizen')->default(false);
+
 
             $table->timestamps();
 

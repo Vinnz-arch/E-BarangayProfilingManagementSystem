@@ -20,7 +20,7 @@ const EditResident = () => {
     last_name: '',
     first_name: '',
     middle_initial: '',
-    household_type: '',
+    is_household_type: '',
     gender: '',
     date_of_birth: '',
     citizenship: 'Filipino',
@@ -51,7 +51,7 @@ const EditResident = () => {
           last_name: resData.last_name,
           first_name: resData.first_name,
           middle_initial: resData.middle_initial || '',
-          household_type: resData.household_type,
+          is_household_type: resData.is_household_type,
           gender: resData.gender,
           date_of_birth: resData.date_of_birth ? resData.date_of_birth.split('T')[0] : '',
           citizenship: resData.citizenship,
@@ -172,14 +172,15 @@ const EditResident = () => {
                             <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted ml-1">Household Type</label>
                             <select
                                 required
-                                value={formData.household_type}
-                                onChange={(e) => setFormData({ ...formData, household_type: e.target.value })}
+                                value={formData.is_household_type}
+                                onChange={(e) => setFormData({ ...formData, is_household_type: e.target.value })}
                                 className="w-full bg-bg-main border border-border-muted rounded-2xl px-5 py-4 text-sm text-text font-bold tracking-tighter outline-none focus:border-primary transition-all cursor-pointer"
-                            >
+                                >
                                 <option value="" disabled>Select Household Type</option>
-                                <option value="Head of Household">Head of Household</option>
-                                <option value="Member of Household">Member of Household</option>
-                            </select>
+                                <option value="1">Head of Household</option>
+                                <option value="0">Member of Household</option>
+                                </select>
+
                         </div>
 
                         <div className="space-y-2">

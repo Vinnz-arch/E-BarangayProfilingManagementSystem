@@ -15,7 +15,7 @@ class Resident extends Model
         'last_name',
         'first_name',
         'middle_initial',
-        'household_type',
+        'is_household_type',
         'gender',
         'date_of_birth',
         'citizenship',
