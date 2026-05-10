@@ -45,10 +45,12 @@ class ResidentController extends Controller
         }
 
         $limit = $request->input('limit');
+        $query->orderBy('last_name', 'asc')->orderBy('first_name', 'asc');
+        
         if ($limit) {
-            $residents = $query->latest()->paginate($limit);
+            $residents = $query->paginate($limit);
         } else {
-            $residents = $query->latest()->get();
+            $residents = $query->get();
         }
 
         return response()->json($residents);
@@ -60,7 +62,7 @@ class ResidentController extends Controller
             'sitio_id' => 'required|exists:sitios,id',
             'last_name' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
-            'middle_initial' => 'nullable|string|max:10',
+            'middle_name' => 'nullable|string|max:255',
             'is_household_type' => 'required|string',
             'gender' => 'required|string',
             'date_of_birth' => 'required|date',
@@ -94,7 +96,7 @@ class ResidentController extends Controller
         $validated = $request->validate([
             'last_name' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
-            'middle_initial' => 'nullable|string|max:10',
+            'middle_name' => 'nullable|string|max:255',
             'is_household_type' => 'required|string',
             'gender' => 'required|string',
             'date_of_birth' => 'required|date',

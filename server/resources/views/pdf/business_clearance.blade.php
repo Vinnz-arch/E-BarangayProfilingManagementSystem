@@ -37,7 +37,7 @@
     <div class="content">
         <p>TO WHOM IT MAY CONCERN:</p>
         <p style="text-indent: 50px;">
-            This is to certify that <strong>{{ $resident->first_name }} {{ $resident->middle_initial }} {{ $resident->last_name }}</strong>, 
+            This is to certify that <strong>{{ $resident->first_name }} {{ $resident->middle_name }} {{ $resident->last_name }}</strong>, 
             a resident of Sitio {{ $resident->sitio->name }}, Barangay PeopleMap, is granted this clearance to operate/establish the following business:
         </p>
 

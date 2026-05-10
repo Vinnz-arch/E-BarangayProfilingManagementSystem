@@ -18,7 +18,7 @@ const AddResident = () => {
   const [formData, setFormData] = useState({
     last_name: '',
     first_name: '',
-    middle_initial: '',
+    middle_name: '',
     is_household_type: '',
     gender: '',
     date_of_birth: '',
@@ -126,13 +126,12 @@ const AddResident = () => {
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted ml-1">M.I.</label>
+                        <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted ml-1">Middle Name</label>
                         <input
                         type="text"
-                        value={formData.middle_initial}
-                        onChange={(e) => setFormData({ ...formData, middle_initial: e.target.value })}
-                        placeholder="M.I."
-                        maxLength={5}
+                        value={formData.middle_name}
+                        onChange={(e) => setFormData({ ...formData, middle_name: e.target.value })}
+                        placeholder="Middle Name"
                         className="w-full bg-bg-main border border-border-muted rounded-2xl px-5 py-4 text-sm text-text font-bold tracking-tighter outline-none focus:border-primary transition-all placeholder:text-text-muted/50"
                         />
                     </div>

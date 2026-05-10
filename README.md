@@ -28,12 +28,14 @@ Before you begin, ensure you have the following installed on your desktop:
 Follow these steps to get the project running on your local machine.
 
 ### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd PeopleMapBaranggay
 ```
 
 ### 2. Backend Setup (Laravel)
+
 1. Navigate to the server directory:
    ```bash
    cd server
@@ -46,7 +48,7 @@ cd PeopleMapBaranggay
    ```bash
    cp .env.example .env
    ```
-   *Edit the `.env` file and update your database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`).*
+   _Edit the `.env` file and update your database credentials (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`)._
 4. Generate application key:
    ```bash
    php artisan key:generate
@@ -59,9 +61,10 @@ cd PeopleMapBaranggay
    ```bash
    php artisan serve
    ```
-   *The API will be available at `http://127.0.0.1:8000`.*
+   _The API will be available at `http://127.0.0.1:8000`._
 
 ### 3. Frontend Setup (React)
+
 1. Open a new terminal and navigate to the client directory:
    ```bash
    cd client
@@ -74,19 +77,21 @@ cd PeopleMapBaranggay
    ```bash
    npm run dev
    ```
-   *The application will be available at `http://localhost:5173` (or the port shown in your terminal).*
+   _The application will be available at `http://localhost:5173` (or the port shown in your terminal)._
 
 ---
 
 ## 📖 Development Commands
 
 ### Server (Laravel)
+
 - `php artisan serve`: Run the API server.
 - `php artisan migrate`: Run database migrations.
 - `php artisan db:seed`: Seed the database with sample data.
 - `php artisan tinker`: Interactive PHP shell.
 
 ### Client (React)
+
 - `npm run dev`: Start the development server with Hot Module Replacement (HMR).
 - `npm run build`: Build the application for production.
 - `npm run lint`: Run ESLint to check for code quality.
@@ -123,3 +128,5 @@ PeopleMapBaranggay/
 ## 📝 License
 
 This project is licensed under the MIT License.
+
+php artisan serve --host=0.0.0.0 --port=8000

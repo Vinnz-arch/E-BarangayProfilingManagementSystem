@@ -5,6 +5,7 @@ import { MainLayout } from "../../components/layouts";
 import { Button, LoadingSpinner, Icon } from "../../components/ui";
 import { AddSitioModal } from "./components/AddSitioModal";
 import { EditSitioModal } from "./components/EditSitioModal";
+import { DeleteSitioModal } from "./components/DeleteSitioModal";
 import { notify } from "../../util/notify";
 
 interface SitioData {
@@ -18,6 +19,7 @@ const Sitio = () => {
     const navigate = useNavigate();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedSitio, setSelectedSitio] = useState<SitioData | null>(null);
     const [sitios, setSitios] = useState<SitioData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -44,21 +46,13 @@ const Sitio = () => {
         setIsEditModalOpen(true);
     };
 
-    const handleViewResidents = (sitio: SitioData) => {
-        navigate(`/app/sitio/${sitio.id}/residents`);
+    const handleDeleteClick = (sitio: SitioData) => {
+        setSelectedSitio(sitio);
+        setIsDeleteModalOpen(true);
     };
 
-    const handleDelete = async (id: number) => {
-        if (!window.confirm("Are you sure you want to delete this sitio?")) return;
-
-        try {
-            const response = await api.delete(`/sitios/${id}`);
-            notify.success(response.data.message || "Sitio deleted successfully");
-            fetchSitios();
-        } catch (error: any) {
-            const errorMessage = error.response?.data?.message || "Failed to delete sitio";
-            notify.error(errorMessage);
-        }
+    const handleViewResidents = (sitio: SitioData) => {
+        navigate(`/app/sitio/${sitio.id}/residents`);
     };
 
     const content = (
@@ -118,7 +112,7 @@ const Sitio = () => {
                                                 <Icon iconName="FaPen" size={12} />
                                             </button>
                                             <button 
-                                                onClick={() => handleDelete(sitio.id)}
+                                                onClick={() => handleDeleteClick(sitio)}
                                                 className="p-1.5 text-text-muted hover:text-danger transition-colors bg-bg-main rounded-lg border border-border-muted"
                                                 title="Delete"
                                             >
@@ -157,6 +151,19 @@ const Sitio = () => {
                 onClose={() => {
                     setIsEditModalOpen(false);
                     setSelectedSitio(null);
+                    fetchSitios();
+                }}
+            />
+
+            <DeleteSitioModal 
+                isOpen={isDeleteModalOpen}
+                sitioId={selectedSitio?.id || null}
+                sitioName={selectedSitio?.name || null}
+                onClose={() => {
+                    setIsDeleteModalOpen(false);
+                    setSelectedSitio(null);
+                }}
+                onSuccess={() => {
                     fetchSitios();
                 }}
             />

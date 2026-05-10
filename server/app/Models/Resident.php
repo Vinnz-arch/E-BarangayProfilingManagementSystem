@@ -14,7 +14,7 @@ class Resident extends Model
         'sitio_id',
         'last_name',
         'first_name',
-        'middle_initial',
+        'middle_name',
         'is_household_type',
         'gender',
         'date_of_birth',

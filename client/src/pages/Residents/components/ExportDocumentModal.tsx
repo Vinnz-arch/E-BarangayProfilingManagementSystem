@@ -7,7 +7,7 @@ interface Resident {
     id: number;
     last_name: string;
     first_name: string;
-    middle_initial: string;
+    middle_name: string;
 }
 
 interface ExportDocumentModalProps {

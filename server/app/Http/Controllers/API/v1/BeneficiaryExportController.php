@@ -65,5 +65,7 @@ class BeneficiaryExportController extends Controller
         if ($request->has('sitio_id')) {
             $query->where('sitio_id', $request->sitio_id);
         }
+
+        $query->orderBy('last_name', 'asc')->orderBy('first_name', 'asc');
     }
 }

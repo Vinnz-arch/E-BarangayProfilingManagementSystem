@@ -7,7 +7,7 @@ interface ResidentData {
   id: number;
   last_name: string;
   first_name: string;
-  middle_initial: string;
+  middle_name: string;
   gender: string;
   date_of_birth: string;
   is_household_type: string;
@@ -111,7 +111,7 @@ export const ViewResidentModal: React.FC<ViewResidentModalProps> = ({ isOpen, on
               <div className="h-[2px] grow bg-border-muted"></div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <DetailItem icon="FaUserTag" label="Full Name" value={`${resident.last_name}, ${resident.first_name} ${resident.middle_initial || ''}`} />
+              <DetailItem icon="FaUserTag" label="Full Name" value={`${resident.last_name}, ${resident.first_name} ${resident.middle_name || ''}`} />
               <DetailItem icon="FaCalendarDay" label="Birth Date" value={new Date(resident.date_of_birth).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
               <DetailItem icon="FaVenusMars" label="Gender" value={resident.gender} />
               <DetailItem icon="FaHeart" label="Civil Status" value={resident.civil_status} />

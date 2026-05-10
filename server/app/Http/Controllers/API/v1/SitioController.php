@@ -11,7 +11,7 @@ class SitioController extends Controller
 {
     public function index()
     {
-        $sitios = Sitio::latest()->get();
+        $sitios = Sitio::orderBy('name', 'asc')->get();
         return response()->json($sitios);
     }
 
@@ -66,13 +66,18 @@ class SitioController extends Controller
         ]);
     }
 
-    public function destroy(Sitio $sitio)
+    public function destroy(Request $request, Sitio $sitio)
     {
-        // Delete logo if exists (Optional, depending on if you want to keep files for soft deleted records)
-        // if ($sitio->logo) {
-        //     Storage::disk('public')->delete($sitio->logo);
-        // }
-        
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $request->user()->password)) {
+            return response()->json([
+                'message' => 'Incorrect password. Deletion aborted.'
+            ], 403);
+        }
+
         $sitio->delete();
 
         return response()->json([

@@ -10,7 +10,7 @@ interface Resident {
   id: number;
   last_name: string;
   first_name: string;
-  middle_initial: string;
+  middle_name: string;
   gender: string;
   date_of_birth: string;
   household_type: string;
@@ -246,7 +246,7 @@ const SitioResidents = () => {
                                                     <td className="px-6 py-5">
                                                         <div className="flex flex-col">
                                                             <span className="text-sm font-black uppercase italic tracking-tighter text-text">
-                                                                {resident.last_name}, {resident.first_name} {resident.middle_initial}
+                                                                {resident.last_name}, {resident.first_name} {resident.middle_name}
                                                             </span>
                                                             <span className="text-[9px] font-bold text-text-muted/60 uppercase">
                                                                 {resident.gender} • {resident.civil_status} • {resident.is_household_type === '1' ? 'Head' : 'Member'}

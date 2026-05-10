@@ -35,7 +35,7 @@
     <div class="content">
         <p>TO WHOM IT MAY CONCERN:</p>
         <p style="text-indent: 50px;">
-            This is to certify that <strong>{{ $resident->first_name }} {{ $resident->middle_initial }} {{ $resident->last_name }}</strong>, 
+            This is to certify that <strong>{{ $resident->first_name }} {{ $resident->middle_name }} {{ $resident->last_name }}</strong>, 
             of legal age, {{ $resident->civil_status }}, {{ $resident->citizenship }} citizen, is a 
             bona fide resident of Sitio {{ $resident->sitio->name }}, Barangay PeopleMap, Example City.
         </p>
