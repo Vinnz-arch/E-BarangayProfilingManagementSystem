@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\v1\ResidentDocumentController;
 use App\Http\Controllers\API\v1\SitioController;
 use App\Http\Controllers\API\v1\ResidentController;
 use App\Http\Controllers\API\v1\OfficialController;
@@ -28,6 +29,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/residents', [ResidentController::class, 'store']);
         Route::put('/residents/{resident}', [ResidentController::class, 'update']);
         Route::delete('/residents/{resident}', [ResidentController::class, 'destroy']);
+        Route::post('/residents/{resident}/export-document', [ResidentDocumentController::class, 'export']);
 
         // Beneficiary Export Routes
         Route::prefix('beneficiaries')->group(function () {

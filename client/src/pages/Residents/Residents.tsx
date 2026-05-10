@@ -4,6 +4,7 @@ import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, LoadingSpinner, Icon } from "../../components/ui";
 import { ViewResidentModal } from "../sitio/components/ViewResidentModal";
+import { ExportDocumentModal } from "./components/ExportDocumentModal";
 import { notify } from "../../util/notify";
 
 interface Sitio {
@@ -41,6 +42,7 @@ const Residents = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isExportModalOpen, setIsExportModalOpen] = useState(false);
     
     // Pagination states
     const [page, setPage] = useState(1);
@@ -130,6 +132,11 @@ const Residents = () => {
 
     const handleEdit = (resident: Resident) => {
         navigate(`/app/sitio/${resident.sitio_id}/residents/${resident.id}/edit`);
+    };
+
+    const handleExportClick = (resident: Resident) => {
+        setSelectedResident(resident);
+        setIsExportModalOpen(true);
     };
 
     const handleDeleteResident = async (residentId: number) => {
@@ -273,6 +280,13 @@ const Residents = () => {
                                                         <Icon iconName="FaEye" size={14} />
                                                     </button>
                                                     <button 
+                                                        onClick={() => handleExportClick(resident)}
+                                                        className="p-2 text-text-muted hover:text-primary transition-colors bg-bg-light rounded-xl border border-border-muted shadow-sm"
+                                                        title="Export Documents"
+                                                    >
+                                                        <Icon iconName="FaFileExport" size={14} />
+                                                    </button>
+                                                    <button 
                                                         onClick={() => handleEdit(resident)}
                                                         className="p-2 text-text-muted hover:text-primary transition-colors bg-bg-light rounded-xl border border-border-muted shadow-sm"
                                                         title="Edit"
@@ -330,6 +344,15 @@ const Residents = () => {
                 }}
                 resident={selectedResident}
                 sitioName={selectedResident?.sitio?.name}
+            />
+
+            <ExportDocumentModal 
+                isOpen={isExportModalOpen}
+                onClose={() => {
+                    setIsExportModalOpen(false);
+                    setSelectedResident(null);
+                }}
+                resident={selectedResident}
             />
         </div>
     );
