@@ -4,6 +4,7 @@ use App\Http\Controllers\API\v1\SitioController;
 use App\Http\Controllers\API\v1\ResidentController;
 use App\Http\Controllers\API\v1\OfficialController;
 use App\Http\Controllers\API\v1\AuthController;
+use App\Http\Controllers\API\v1\BeneficiaryExportController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/residents', [ResidentController::class, 'store']);
         Route::put('/residents/{resident}', [ResidentController::class, 'update']);
         Route::delete('/residents/{resident}', [ResidentController::class, 'destroy']);
+
+        // Beneficiary Export Routes
+        Route::prefix('beneficiaries')->group(function () {
+            Route::get('/pwd/export', [BeneficiaryExportController::class, 'exportPwd']);
+            Route::get('/solo-parent/export', [BeneficiaryExportController::class, 'exportSoloParent']);
+            Route::get('/4ps/export', [BeneficiaryExportController::class, 'export4ps']);
+            Route::get('/senior-citizen/export', [BeneficiaryExportController::class, 'exportSeniorCitizen']);
+        });
 
         Route::get('/officials', [OfficialController::class, 'index']);
         Route::get('/officials/{official}', [OfficialController::class, 'show']);

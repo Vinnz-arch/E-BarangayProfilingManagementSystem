@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '../../../components/ui';
 import { Button } from "../../../components/ui/index";
+import * as FaIcons from 'react-icons/fa6';
 
 interface ResidentData {
   id: number;
@@ -9,7 +10,7 @@ interface ResidentData {
   middle_initial: string;
   gender: string;
   date_of_birth: string;
-  household_type: string;
+  is_household_type: string;
   citizenship: string;
   civil_status: string;
   occupation: string;
@@ -32,7 +33,7 @@ interface ViewResidentModalProps {
 export const ViewResidentModal: React.FC<ViewResidentModalProps> = ({ isOpen, onClose, resident, sitioName }) => {
   if (!isOpen || !resident) return null;
 
-  const DetailItem = ({ label, value, icon, color = "primary" }: { label: string, value: string | React.ReactNode, icon: string, color?: string }) => (
+  const DetailItem = ({ label, value, icon, color = "primary" }: { label: string, value: string | React.ReactNode, icon: keyof typeof FaIcons, color?: string }) => (
     <div className="bg-bg-main border border-border-muted p-4 rounded-2xl flex items-start gap-4 transition-all hover:border-primary/30 group">
       <div className={`p-2 bg-bg-light rounded-xl text-${color} border border-border-muted group-hover:scale-110 transition-transform`}>
         <Icon iconName={icon} size={18} />
@@ -44,7 +45,7 @@ export const ViewResidentModal: React.FC<ViewResidentModalProps> = ({ isOpen, on
     </div>
   );
 
-  const StatusBadge = ({ active, label, icon }: { active: boolean, label: string, icon: string }) => (
+  const StatusBadge = ({ active, label, icon }: { active: boolean, label: string, icon: keyof typeof FaIcons }) => (
     <div className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${
       active 
         ? 'bg-success/5 border-success/20 text-success' 

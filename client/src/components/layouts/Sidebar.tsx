@@ -1,12 +1,22 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import api from "../../util/axios";
-import { Icon } from "../ui";
+import { Icon, LoadingSpinner } from "../ui";
 import * as FaIcons from 'react-icons/fa6';
 import { PATHS } from "../../routes/path";
 import { notify } from "../../util/notify";
+import { useState } from "react";
 
-// ... (MenuItem and MenuGroup remain same)
+interface MenuItem {
+  name: string;
+  icon: keyof typeof FaIcons;
+  path: string;
+}
+
+interface MenuGroup {
+  group: string;
+  items: MenuItem[];
+}
 
 interface SidebarProps {
   isOpen: boolean;
@@ -15,20 +25,22 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    if (window.confirm("Are you sure you want to logout?")) {
-        try {
-            await api.post("/logout");
-        } catch (error) {
-            console.error("Logout error:", error);
-        } finally {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            notify.success("Logged out successfully");
-            navigate(PATHS.LOGIN);
-        }
-    }
+      setIsLoggingOut(true);
+
+      try {
+          await api.post("/logout");
+      } catch (error) {
+          console.error("Logout error:", error);
+      } finally {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          setIsLoggingOut(false);
+          notify.success("Logged out successfully");
+          navigate(PATHS.LOGIN);
+      }
   };
 
   const menuGroups: MenuGroup[] = [
@@ -125,14 +137,25 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
         <div className="pb-8">
             <button
                 onClick={handleLogout}
-                className="w-full flex items-center p-2.5 rounded-xl group text-danger hover:bg-danger hover:text-bg-light transition-all duration-300"
+                disabled={isLoggingOut}
+                className={`w-full flex items-center p-2.5 rounded-xl group transition-all duration-300 cursor-pointer ${
+                  isLoggingOut 
+                    ? "bg-bg-main text-text-muted cursor-not-allowed" 
+                    : "text-danger hover:bg-danger hover:text-bg-light"
+                }`}
             >
-                <Icon
+                {isLoggingOut ? (
+                  <LoadingSpinner size="sm" color="text-text-muted" />
+                ) : (
+                  <Icon
                     iconName="FaArrowRightFromBracket"
                     className="text-danger group-hover:text-bg-light transition-colors"
-                />
-                <span className="ml-3 text-sm font-black italic uppercase tracking-tighter group-hover:text-bg-light">
-                    Logout
+                  />
+                )}
+                <span className={`ml-3 text-sm font-black italic uppercase tracking-tighter ${
+                  !isLoggingOut && "group-hover:text-bg-light"
+                }`}>
+                    {isLoggingOut ? "Logging out..." : "Logout"}
                 </span>
             </button>
         </div>

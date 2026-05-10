@@ -4,6 +4,7 @@ import { MainLayout } from "../../components/layouts";
 import { LoadingSpinner, Icon, Button } from "../../components/ui";
 import { ViewResidentModal } from "../sitio/components/ViewResidentModal";
 import { notify } from "../../util/notify";
+import * as FaIcons from 'react-icons/fa6';
 
 interface Resident {
   id: number;
@@ -33,6 +34,8 @@ const Beneficiaries = () => {
     const [activeCategory, setActiveCategory] = useState<"pwd" | "solo" | "4ps" | "senior">("pwd");
     const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
+    const [showExportMenu, setShowExportMenu] = useState(false);
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -50,6 +53,50 @@ const Beneficiaries = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    const handleExport = async (format: 'xlsx' | 'csv') => {
+        setIsExporting(true);
+        setShowExportMenu(false);
+        try {
+            const endpointMap = {
+                pwd: '/beneficiaries/pwd/export',
+                solo: '/beneficiaries/solo-parent/export',
+                '4ps': '/beneficiaries/4ps/export',
+                senior: '/beneficiaries/senior-citizen/export'
+            };
+
+            const response = await api.get(endpointMap[activeCategory], {
+                params: { format },
+                responseType: 'blob'
+            });
+
+            // Create blob and download
+            const blob = new Blob([response.data], { 
+                type: format === 'xlsx' 
+                    ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+                    : 'text/csv' 
+            });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${activeCategory}_beneficiaries_${new Date().toISOString().split('T')[0]}.${format}`;
+            document.body.appendChild(link);
+            link.click();
+            
+            // Cleanup
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+            notify.success(`Exported ${activeCategory} list as ${format.toUpperCase()}`);
+        } catch (error) {
+            console.error("Export failed:", error);
+            notify.error("Failed to export beneficiaries list");
+        } finally {
+            setIsExporting(false);
+        }
+    };
 
     // Calculate counts
     const stats = {
@@ -71,7 +118,7 @@ const Beneficiaries = () => {
 
     const currentList = getFilteredResidents();
 
-    const CategoryCard = ({ type, label, count, icon, colorClass }: { type: any, label: string, count: number, icon: string, colorClass: string }) => (
+    const CategoryCard = ({ type, label, count, icon, colorClass }: { type: any, label: string, count: number, icon: keyof typeof FaIcons, colorClass: string }) => (
         <button 
             onClick={() => setActiveCategory(type)}
             className={`flex flex-col p-6 rounded-[2.5rem] border transition-all duration-300 text-left group ${
@@ -122,14 +169,50 @@ const Beneficiaries = () => {
 
                     {/* Category List Section */}
                     <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                            <div className="h-[2px] w-12 bg-primary"></div>
-                            <h2 className="text-xl font-black uppercase italic tracking-tighter text-text">
-                                {activeCategory === "pwd" && "Persons with Disabilities"}
-                                {activeCategory === "solo" && "Solo Parents List"}
-                                {activeCategory === "4ps" && "4Ps Beneficiaries"}
-                                {activeCategory === "senior" && "Senior Citizens"}
-                            </h2>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="h-[2px] w-12 bg-primary"></div>
+                                <h2 className="text-xl font-black uppercase italic tracking-tighter text-text">
+                                    {activeCategory === "pwd" && "Persons with Disabilities"}
+                                    {activeCategory === "solo" && "Solo Parents List"}
+                                    {activeCategory === "4ps" && "4Ps Beneficiaries"}
+                                    {activeCategory === "senior" && "Senior Citizens"}
+                                </h2>
+                            </div>
+
+                            {currentList.length > 0 && (
+                                <div className="relative">
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        iconName={isExporting ? "FaSpinner" : "FaDownload"}
+                                        className={isExporting ? "animate-pulse" : ""}
+                                        disabled={isExporting}
+                                        onClick={() => setShowExportMenu(!showExportMenu)}
+                                    >
+                                        {isExporting ? "Exporting..." : "Export"}
+                                    </Button>
+                                    
+                                    {showExportMenu && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-bg-light border border-border-muted rounded-2xl shadow-xl z-50 overflow-hidden">
+                                            <button 
+                                                onClick={() => handleExport('xlsx')}
+                                                className="w-full px-4 py-3 text-left text-[10px] font-black uppercase italic tracking-widest text-text hover:bg-bg-main flex items-center gap-3 transition-colors"
+                                            >
+                                                <Icon iconName="FaFileExcel" className="text-success" />
+                                                Excel (.xlsx)
+                                            </button>
+                                            <button 
+                                                onClick={() => handleExport('csv')}
+                                                className="w-full px-4 py-3 text-left text-[10px] font-black uppercase italic tracking-widest text-text hover:bg-bg-main flex items-center gap-3 transition-colors"
+                                            >
+                                                <Icon iconName="FaFileCsv" className="text-primary" />
+                                                CSV (.csv)
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {currentList.length > 0 ? (
