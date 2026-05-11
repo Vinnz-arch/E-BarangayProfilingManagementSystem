@@ -27,6 +27,8 @@ interface Resident {
   school_attainment: string;
   skills: string | null;
   blood_type: string;
+  contact_number: string | null;
+  email_address: string | null;
   is_4ps: boolean;
   is_pwd: boolean;
   is_solo_parent: boolean;

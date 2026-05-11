@@ -24,6 +24,8 @@ class Resident extends Model
         'school_attainment',
         'skills',
         'blood_type',
+        'contact_number',
+        'email_address',
         'is_4ps',
         'is_pwd',
         'is_solo_parent',

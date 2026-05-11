@@ -3,7 +3,7 @@ import { Toaster } from 'react-hot-toast';
 export const ToastProvider = () => {
   return (
     <Toaster
-      position="bottom-right"
+      position="top-right"
       gutter={8}
       toastOptions={{
         duration: 3000, // 3 seconds

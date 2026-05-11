@@ -4,6 +4,7 @@ import api from "../../util/axios";
 import { MainLayout } from "../../components/layouts";
 import { Button, Icon } from "../../components/ui";
 import { notify } from '../../util/notify';
+import { ToastProvider } from '../../components/ui';
 
 interface SitioData {
   id: number;
@@ -28,6 +29,8 @@ const AddResident = () => {
     school_attainment: '',
     skills: '',
     blood_type: '',
+    contact_number: '',
+    email_address: '',
     is_4ps: false,
     is_pwd: false,
     is_solo_parent: false,
@@ -229,6 +232,37 @@ const AddResident = () => {
                         <option value="O+">O+</option>
                         <option value="O-">O-</option>
                         </select>
+                    </div>
+                </div>
+            </div>
+
+            {/* Section: Contact Information */}
+            <div className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-border-muted pb-4">
+                    <Icon iconName="FaAddressBook" size={18} className="text-primary" />
+                    <h2 className="text-sm font-black uppercase italic tracking-widest text-text">Contact Information</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted ml-1">Contact Number (Optional)</label>
+                        <input
+                        type="tel"
+                        value={formData.contact_number}
+                        onChange={(e) => setFormData({ ...formData, contact_number: e.target.value })}
+                        placeholder="09123456789"
+                        className="w-full bg-bg-main border border-border-muted rounded-2xl px-5 py-4 text-sm text-text font-bold tracking-tighter outline-none focus:border-primary transition-all placeholder:text-text-muted/50"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted ml-1">Email Address (Optional)</label>
+                        <input
+                        type="email"
+                        value={formData.email_address}
+                        onChange={(e) => setFormData({ ...formData, email_address: e.target.value })}
+                        placeholder="resident@example.com"
+                        className="w-full bg-bg-main border border-border-muted rounded-2xl px-5 py-4 text-sm text-text font-bold tracking-tighter outline-none focus:border-primary transition-all placeholder:text-text-muted/50"
+                        />
                     </div>
                 </div>
             </div>

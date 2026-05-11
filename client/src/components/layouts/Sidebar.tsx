@@ -83,10 +83,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-40 w-64 h-screen bg-bg-light pt-20 transition-transform border-r border-border-muted shadow
+      className={`fixed top-0 left-0 z-40 w-68 h-screen bg-bg-light pt-20 transition-transform border-r border-border-muted shadow
       ${isOpen ? "translate-x-0" : "-translate-x-full"} sm:translate-x-0 sm:shadow-none`}>
       <div className="h-full px-4 pb-4 flex flex-col justify-between">
-        <div className="overflow-y-auto">
+        <div className="">
           {menuGroups.map((group) => (
             <div key={group.group} className="mb-6">
               <h3 className="px-3 mb-2 text-sm font-black uppercase italic tracking-widest text-text-muted">

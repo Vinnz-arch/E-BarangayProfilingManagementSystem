@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://192.168.100.24:8000/api/v1', // default http://192.168.137.1:8000/api/v1 | http://127.0.0.1:8000/api/v1  http://192.168.100.24:5173/api/v1
+    baseURL: 'http://127.0.0.1:8000/api/v1', // default http://192.168.137.1:8000/api/v1 | http://127.0.0.1:8000/api/v1  http://192.168.100.24:5173/api/v1
 });
 
 // Request interceptor to add token

@@ -4,6 +4,7 @@ import api from "../../util/axios";
 import { Button, Icon } from "../../components/ui";
 import { notify } from "../../util/notify";
 import { PATHS } from "../../routes/path";
+import { ToastProvider } from "../../components/ui";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -38,7 +39,6 @@ const Login = () => {
             {/* Background Decorative Elements */}
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]"></div>
-            
             <div className="w-full max-w-[1100px] grid grid-cols-1 lg:grid-cols-2 bg-bg-light border border-border-muted rounded-[3rem] shadow-2xl overflow-hidden relative z-10">
                 
                 {/* Visual Side */}
@@ -61,7 +61,7 @@ const Login = () => {
                                 Manage Your <br />
                                 <span className="text-primary">Community.</span>
                             </h1>
-                            <p className="text-lg font-bold text-bg-light/60 uppercase tracking-widest max-w-md">
+                            <p className="text-lg font-bold text-bg-light/60 uppercase tracking-widest max-w-md text-black">
                                 The ultimate demographic mapping and resident management system for modern barangays.
                             </p>
                         </div>
@@ -75,7 +75,7 @@ const Login = () => {
                                 </div>
                             ))}
                         </div>
-                        <p className="text-[10px] font-black uppercase italic tracking-widest text-bg-light/40">
+                        <p className="text-[10px] font-black uppercase italic text-indigo-900 tracking-widest text-bg-light/40">
                             Trusted by <br /> Local Officials
                         </p>
                     </div>
@@ -112,7 +112,6 @@ const Login = () => {
                             <div className="space-y-2">
                                 <div className="flex justify-between items-end ml-1">
                                     <label className="text-[10px] font-black uppercase italic tracking-widest text-text-muted">Password</label>
-                                    <button type="button" className="text-[9px] font-black uppercase italic tracking-widest text-primary hover:underline">Forgot?</button>
                                 </div>
                                 <div className="relative">
                                     <Icon iconName="FaLock" className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
@@ -125,6 +124,7 @@ const Login = () => {
                                         className="w-full bg-bg-main border border-border-muted rounded-2xl pl-14 pr-6 py-5 text-sm text-text font-bold tracking-tighter outline-none focus:border-primary transition-all placeholder:text-text-muted/30"
                                     />
                                 </div>
+                                <button type="button" className="text-[9px] font-black uppercase italic tracking-widest text-primary hover:underline">“Forgot your password? Contact your administrator.”</button>
                             </div>
 
                             <div className="pt-4">
@@ -140,7 +140,7 @@ const Login = () => {
                                 </Button>
                             </div>
                         </form>
-
+                            <ToastProvider />
                         <div className="pt-8 text-center">
                             <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">
                                 PeopleMap Baranggay v2.0 &copy; 2026
@@ -149,7 +149,9 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            
         </div>
+        
     );
 };
 

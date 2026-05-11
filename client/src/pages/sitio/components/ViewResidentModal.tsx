@@ -17,6 +17,8 @@ interface ResidentData {
   school_attainment: string;
   skills: string | null;
   blood_type: string;
+  contact_number: string | null;
+  email_address: string | null;
   is_4ps: boolean;
   is_pwd: boolean;
   is_solo_parent: boolean;
@@ -32,6 +34,17 @@ interface ViewResidentModalProps {
 
 export const ViewResidentModal: React.FC<ViewResidentModalProps> = ({ isOpen, onClose, resident, sitioName }) => {
   if (!isOpen || !resident) return null;
+
+  const calculateAge = (dob: string) => {
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
   const DetailItem = ({ label, value, icon, color = "primary" }: { label: string, value: string | React.ReactNode, icon: keyof typeof FaIcons, color?: string }) => (
     <div className="bg-bg-main border border-border-muted p-4 rounded-2xl flex items-start gap-4 transition-all hover:border-primary/30 group">
@@ -113,10 +126,24 @@ export const ViewResidentModal: React.FC<ViewResidentModalProps> = ({ isOpen, on
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <DetailItem icon="FaUserTag" label="Full Name" value={`${resident.last_name}, ${resident.first_name} ${resident.middle_name || ''}`} />
               <DetailItem icon="FaCalendarDay" label="Birth Date" value={new Date(resident.date_of_birth).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} />
+              <DetailItem icon="FaHourglassHalf" label="Age" value={`${calculateAge(resident.date_of_birth)} Years Old`} />
               <DetailItem icon="FaVenusMars" label="Gender" value={resident.gender} />
               <DetailItem icon="FaHeart" label="Civil Status" value={resident.civil_status} />
               <DetailItem icon="FaFlag" label="Citizenship" value={resident.citizenship} />
               <DetailItem icon="FaDroplet" label="Blood Type" value={resident.blood_type} color="danger" />
+            </div>
+          </div>
+
+          {/* Section: Contact Details */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 text-text-muted">
+              <div className="h-[2px] w-8 bg-border-muted"></div>
+              <h3 className="text-[10px] font-black uppercase italic tracking-[0.2em]">Contact Information</h3>
+              <div className="h-[2px] grow bg-border-muted"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <DetailItem icon="FaPhone" label="Contact Number" value={resident.contact_number || 'N/A'} />
+              <DetailItem icon="FaEnvelope" label="Email Address" value={resident.email_address || 'N/A'} />
             </div>
           </div>
 
