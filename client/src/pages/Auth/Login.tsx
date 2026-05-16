@@ -75,7 +75,7 @@ const Login = () => {
                                 </div>
                             ))}
                         </div>
-                        <p className="text-[10px] font-black uppercase italic text-indigo-900 tracking-widest text-bg-light/40">
+                        <p className="text-[10px] font-black uppercase italic tracking-widest text-indigo-900  text-bg-light/40">
                             Trusted by <br /> Local Officials
                         </p>
                     </div>

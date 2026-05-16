@@ -76,7 +76,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           name: "Barangay Official",
           icon: "FaUserShield",
           path: PATHS.APP.BARANGAYOFFICIALS,
-        }
+        },
+        {
+          name: "Annoucement",
+          icon: "Fa5",
+          path: PATHS.APP.ANNOUNCEMENT,
+        },
       ],
     },
   ];

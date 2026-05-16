@@ -13,6 +13,7 @@ const HouseHold = React.lazy(() =>import("../pages/household/Household"));
 const Beneficiaries = React.lazy(() =>import("../pages/Beneficiaries/Beneficiaries"));
 const Residents = React.lazy(() =>import("../pages/Residents/Residents"));
 const BarangayOfficial = React.lazy(() =>import("../pages/BarangayOfficial/BarangayOfficial"));
+const Annoucement = React.lazy(() =>import("../pages/Annoucement/Annoucement"))
 
 const ProtectedRoute = () => {
     const token = localStorage.getItem("token");
@@ -22,17 +23,39 @@ const ProtectedRoute = () => {
     return <Outlet />;
 };
 
+const PublicRoute = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        return <Navigate to={PATHS.APP.DASHBOARD} replace />;
+    }
+    return <Outlet />;
+};
+
+const RootRedirect = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        return <Navigate to={PATHS.APP.DASHBOARD} replace />;
+    }
+    return <Navigate to={PATHS.LOGIN} replace />;
+};
+
 export const Routes = createBrowserRouter([
   // Public Routes
   {
     path: PATHS.LOGIN,
-    element: <Login />,
+    element: <PublicRoute />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+    ],
   },
 
-  // Redirect root to login for now
+  // Redirect root to dashboard if logged in, otherwise to login
   {
     path: "/",
-    element: <Navigate to={PATHS.LOGIN} replace />,
+    element: <RootRedirect />,
   },
 
   // Authenticated
@@ -79,7 +102,12 @@ export const Routes = createBrowserRouter([
       {
         path: "barangayofficials",
         element: <BarangayOfficial />,
-      }
+      },
+      {
+      path: "announcement",
+      element: <Annoucement />,
+      },
+
     ],
   },
 ]);

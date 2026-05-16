@@ -151,7 +151,7 @@ const Beneficiaries = () => {
     const CategoryCard = ({ type, label, icon, colorClass }: { type: any, label: string, icon: keyof typeof FaIcons, colorClass: string }) => (
         <button 
             onClick={() => setActiveCategory(type)}
-            className={`flex flex-col p-6 rounded-[2.5rem] border transition-all duration-300 text-left group ${
+            className={`flex flex-col p-6 rounded-[2.5rem] border transition-all duration-300 text-left group cursor-pointer ${
                 activeCategory === type 
                 ? `bg-bg-light border-${colorClass} shadow-xl scale-[1.02]` 
                 : 'bg-bg-light border-border-muted hover:border-primary/30 shadow-sm'
