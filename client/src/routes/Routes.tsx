@@ -12,7 +12,9 @@ const EditResident = React.lazy(() => import("../pages/sitio/EditResident"));
 const HouseHold = React.lazy(() =>import("../pages/household/Household"));
 const Beneficiaries = React.lazy(() =>import("../pages/Beneficiaries/Beneficiaries"));
 const Residents = React.lazy(() =>import("../pages/Residents/Residents"));
-const BarangayOfficial = React.lazy(() =>import("../pages/BarangayOfficial/BarangayOfficial"));
+import BarangayOfficial from "../pages/BarangayOfficial/BarangayOfficial";
+import DocumentRequests from "../pages/DocumentRequests/DocumentRequests";
+import Announcements from "../pages/Announcements/Announcements";
 
 const ProtectedRoute = () => {
     const token = localStorage.getItem("token");
@@ -67,6 +69,10 @@ export const Routes = createBrowserRouter([
         element: <Navigate to={PATHS.APP.DASHBOARD} replace />,
       },
       {
+        path: PATHS.APP.DOCUMENT_REQUESTS,
+        element: <DocumentRequests />,
+      },
+      {
         path: "dashboard",
         element: <Dashboard />,
       },
@@ -101,6 +107,10 @@ export const Routes = createBrowserRouter([
       {
         path: "barangayofficials",
         element: <BarangayOfficial />,
+      },
+      {
+        path: "announcements",
+        element: <Announcements />,
       },
 
     ],

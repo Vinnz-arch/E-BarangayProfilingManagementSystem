@@ -17,5 +17,7 @@ export const PATHS = {
     BENEFICIARIES: `${APP_ROOT}/beneficiaries`,
     RESIDENTS: `${APP_ROOT}/residents`,
     BARANGAYOFFICIALS: `${APP_ROOT}/barangayofficials`,
+    DOCUMENT_REQUESTS: `${APP_ROOT}/document-requests`,
+    ANNOUNCEMENTS: `${APP_ROOT}/announcements`,
   },
 };

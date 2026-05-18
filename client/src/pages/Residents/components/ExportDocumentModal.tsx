@@ -21,6 +21,7 @@ type DocumentType = 'barangay-clearance' | 'business-clearance' | 'certificate-o
 export const ExportDocumentModal: React.FC<ExportDocumentModalProps> = ({ isOpen, onClose, resident }) => {
     const [docType, setDocType] = useState<DocumentType>('barangay-clearance');
     const [isExporting, setIsExporting] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
     
     // Dynamic fields
     const [purpose, setPurpose] = useState("");
@@ -29,6 +30,38 @@ export const ExportDocumentModal: React.FC<ExportDocumentModalProps> = ({ isOpen
     const [businessType, setBusinessType] = useState("");
 
     if (!isOpen || !resident) return null;
+
+    const handleRegisterRequest = async () => {
+        if (!purpose && docType !== 'business-clearance') {
+            notify.error("Please provide a purpose");
+            return;
+        }
+
+        setIsRegistering(true);
+        try {
+            await api.post('/document-requests', {
+                resident_id: resident.id,
+                document_type: docType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                purpose: docType === 'business-clearance' 
+                    ? `Business Clearance for ${businessName} (${businessType}) at ${businessAddress}`
+                    : purpose
+            });
+
+            notify.success("Document request registered successfully");
+            onClose();
+            
+            // Reset fields
+            setPurpose("");
+            setBusinessName("");
+            setBusinessAddress("");
+            setBusinessType("");
+        } catch (error) {
+            console.error("Registration error:", error);
+            notify.error("Failed to register document request");
+        } finally {
+            setIsRegistering(false);
+        }
+    };
 
     const handleExport = async () => {
         setIsExporting(true);
@@ -157,28 +190,48 @@ export const ExportDocumentModal: React.FC<ExportDocumentModalProps> = ({ isOpen
                         )}
                     </div>
 
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex flex-col gap-3 pt-4">
+                        <div className="flex gap-3">
+                            <Button 
+                                variant="ghost" 
+                                className="flex-1 rounded-2xl py-6 font-black uppercase italic"
+                                onClick={onClose}
+                            >
+                                Cancel
+                            </Button>
+                            <Button 
+                                className="flex-1 rounded-2xl py-6 font-black uppercase italic tracking-widest gap-2"
+                                onClick={handleExport}
+                                disabled={isExporting || isRegistering}
+                            >
+                                {isExporting ? (
+                                    <>
+                                        <LoadingSpinner size="sm" color="text-white" />
+                                        <span>Generating...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Icon iconName="FaFileExport" />
+                                        <span>Generate PDF</span>
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                         <Button 
-                            variant="ghost" 
-                            className="flex-1 rounded-2xl py-6 font-black uppercase italic"
-                            onClick={onClose}
+                            variant="ghost"
+                            className="w-full rounded-2xl py-6 font-black uppercase italic tracking-widest gap-2 border-primary/20 hover:bg-primary/5 text-primary"
+                            onClick={handleRegisterRequest}
+                            disabled={isExporting || isRegistering}
                         >
-                            Cancel
-                        </Button>
-                        <Button 
-                            className="flex-1 rounded-2xl py-6 font-black uppercase italic tracking-widest gap-2"
-                            onClick={handleExport}
-                            disabled={isExporting}
-                        >
-                            {isExporting ? (
+                            {isRegistering ? (
                                 <>
-                                    <LoadingSpinner size="sm" color="text-white" />
-                                    <span>Generating...</span>
+                                    <LoadingSpinner size="sm" color="text-primary" />
+                                    <span>Registering...</span>
                                 </>
                             ) : (
                                 <>
-                                    <Icon iconName="FaFileExport" />
-                                    <span>Generate PDF</span>
+                                    <Icon iconName="FaCloudArrowUp" />
+                                    <span>Register as Official Request</span>
                                 </>
                             )}
                         </Button>

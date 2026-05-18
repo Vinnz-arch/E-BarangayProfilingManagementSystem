@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\v1\ResidentDocumentController;
 use App\Http\Controllers\API\v1\SitioController;
 use App\Http\Controllers\API\v1\ResidentController;
+use App\Http\Controllers\API\v1\AnnouncementController;
+use App\Http\Controllers\API\v1\DocumentRequestController;
 use App\Http\Controllers\API\v1\OfficialController;
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\BeneficiaryExportController;
@@ -44,5 +46,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/officials', [OfficialController::class, 'store']);
         Route::put('/officials/{official}', [OfficialController::class, 'update']);
         Route::delete('/officials/{official}', [OfficialController::class, 'destroy']);
+
+        // Document Request Routes
+        Route::get('/document-requests', [DocumentRequestController::class, 'index']);
+        Route::post('/document-requests', [DocumentRequestController::class, 'store']);
+        Route::patch('/document-requests/{id}/status', [DocumentRequestController::class, 'updateStatus']);
+
+        // Announcement Routes
+        Route::get('/announcements', [AnnouncementController::class, 'index']);
+        Route::post('/announcements', [AnnouncementController::class, 'store']);
+        Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy']);
     });
 });
