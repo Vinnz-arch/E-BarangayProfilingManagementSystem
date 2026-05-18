@@ -13,7 +13,6 @@ const HouseHold = React.lazy(() =>import("../pages/household/Household"));
 const Beneficiaries = React.lazy(() =>import("../pages/Beneficiaries/Beneficiaries"));
 const Residents = React.lazy(() =>import("../pages/Residents/Residents"));
 const BarangayOfficial = React.lazy(() =>import("../pages/BarangayOfficial/BarangayOfficial"));
-const Annoucement = React.lazy(() =>import("../pages/Annoucement/Annoucement"))
 
 const ProtectedRoute = () => {
     const token = localStorage.getItem("token");
@@ -102,10 +101,6 @@ export const Routes = createBrowserRouter([
       {
         path: "barangayofficials",
         element: <BarangayOfficial />,
-      },
-      {
-      path: "announcement",
-      element: <Annoucement />,
       },
 
     ],
