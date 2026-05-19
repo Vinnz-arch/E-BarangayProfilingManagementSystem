@@ -101,6 +101,7 @@ const DocumentRequests: React.FC = () => {
                         />
                     </div>
                     <select 
+                        title='option'
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
                         className="bg-bg-light border border-border-muted rounded-2xl px-4 py-2.5 text-sm font-bold tracking-tighter outline-none focus:border-primary transition-all shadow-sm cursor-pointer"

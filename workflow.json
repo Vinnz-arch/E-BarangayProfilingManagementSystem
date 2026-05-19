@@ -1,49 +1,63 @@
 {
-  "name": "Barangay Omnichannel Broadcast",
+  "name": "Barangay Distribution Coordinator",
   "nodes": [
     {
       "parameters": {
         "httpMethod": "POST",
-        "path": "announcement-broadcast",
+        "path": "beneficiary-distribution",
         "options": {}
       },
-      "id": "7a8b9c0d-e1f2-3a4b-5c6d-7e8f9a0b1c2d",
+      "id": "d1e2f3a4-b5c6-7d8e-9f0a-b1c2d3e4f5a6",
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
       "position": [
-        250,
+        200,
         300
       ],
-      "webhookId": "barangay-broadcast-webhook"
+      "webhookId": "distribution-webhook"
     },
     {
       "parameters": {
-        "fieldToSplitOut": "recipients",
+        "fieldToSplitOut": "sitio_batches",
         "options": {}
       },
       "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6",
-      "name": "Split Recipients",
+      "name": "Loop Sitios",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 1,
       "position": [
-        480,
+        420,
         300
       ]
     },
     {
       "parameters": {
-        "fromEmail": "news@peoplemapbaranggay.com",
-        "toEmail": "={{$json.item}}",
-        "subject": "={{$node[\"Webhook\"].json.body.title}}",
-        "html": "=<div style=\"font-family: 'Helvetica', sans-serif; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden;\">\n  <div style=\"background-color: #2563eb; padding: 40px; text-align: center; color: white;\">\n    <h1 style=\"margin: 0; font-style: italic; text-transform: uppercase; letter-spacing: -1px;\">{{$node[\"Webhook\"].json.body.category}} Announcement</h1>\n  </div>\n  <div style=\"padding: 40px; background-color: white;\">\n    <h2 style=\"color: #1e293b; font-size: 24px; margin-top: 0;\">{{$node[\"Webhook\"].json.body.title}}</h2>\n    <p style=\"color: #64748b; line-height: 1.6; font-size: 16px;\">{{$node[\"Webhook\"].json.body.content}}</p>\n    <div style=\"margin-top: 40px; padding-top: 20px; border-top: 1px solid #f1f5f9; color: #94a3b8; font-size: 12px; font-weight: bold; text-transform: uppercase;\">\n      Published on {{$node[\"Webhook\"].json.body.published_at}}\n    </div>\n  </div>\n  <div style=\"background-color: #f8fafc; padding: 20px; text-align: center; color: #94a3b8; font-size: 10px;\">\n    This is an official community broadcast from PeopleMapBaranggay.\n  </div>\n</div>"
+        "fieldToSplitOut": "emails",
+        "options": {}
       },
       "id": "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e",
-      "name": "Send Email",
+      "name": "Loop Emails",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        640,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "admin@peoplemapbaranggay.com",
+        "toEmail": "={{$json.item}}",
+        "subject": "=Notice: {{$node[\"Webhook\"].json.body.title}} for Sitio {{$node[\"Loop Sitios\"].json.sitio_name}}",
+        "html": "=<div style=\"font-family: sans-serif; max-width: 600px; margin: auto; border: 2px solid #3b82f6; border-radius: 20px; overflow: hidden;\">\n  <div style=\"background-color: #3b82f6; padding: 30px; color: white; text-align: center;\">\n    <h2 style=\"margin: 0; text-transform: uppercase;\">Distribution Notice</h2>\n    <p style=\"margin: 5px 0 0 0;\">Sitio {{$node[\"Loop Sitios\"].json.sitio_name}}</p>\n  </div>\n  <div style=\"padding: 30px;\">\n    <p>Good day! This is a notice for all <strong>{{$node[\"Webhook\"].json.body.target_group_label}}</strong> residents of <strong>Sitio {{$node[\"Loop Sitios\"].json.sitio_name}}</strong>.</p>\n    <p>Please be informed of the following distribution event:</p>\n    <div style=\"background: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0;\">\n      <strong>Event:</strong> {{$node[\"Webhook\"].json.body.title}}<br>\n      <strong>Date:</strong> {{$node[\"Webhook\"].json.body.distribution_date}}<br>\n      <strong>Location:</strong> {{$node[\"Webhook\"].json.body.location}}\n    </div>\n    <p style=\"color: #ef4444; font-weight: bold;\">Important: Please bring your valid ID and Beneficiary Card.</p>\n  </div>\n</div>"
+      },
+      "id": "c3d4e5f6-a7b8-c9d0-e1f2-a3b4c5d6e7f8",
+      "name": "Send Notification",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2,
       "position": [
-        750,
+        880,
         300
       ]
     }
@@ -53,29 +67,40 @@
       "main": [
         [
           {
-            "node": "Split Recipients",
+            "node": "Loop Sitios",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Split Recipients": {
+    "Loop Sitios": {
       "main": [
         [
           {
-            "node": "Send Email",
+            "node": "Loop Emails",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Send Email": {
+    "Loop Emails": {
       "main": [
         [
           {
-            "node": "Split Recipients",
+            "node": "Send Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Notification": {
+      "main": [
+        [
+          {
+            "node": "Loop Emails",
             "type": "main",
             "index": 0
           }

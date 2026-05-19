@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\v1\ResidentDocumentController;
 use App\Http\Controllers\API\v1\SitioController;
 use App\Http\Controllers\API\v1\ResidentController;
+use App\Http\Controllers\API\v1\BeneficiaryDistributionController;
 use App\Http\Controllers\API\v1\AnnouncementController;
 use App\Http\Controllers\API\v1\DocumentRequestController;
 use App\Http\Controllers\API\v1\OfficialController;
@@ -56,5 +57,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/announcements', [AnnouncementController::class, 'index']);
         Route::post('/announcements', [AnnouncementController::class, 'store']);
         Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy']);
+
+        // Beneficiary Distribution Routes
+        Route::get('/beneficiary-distributions', [BeneficiaryDistributionController::class, 'index']);
+        Route::post('/beneficiary-distributions', [BeneficiaryDistributionController::class, 'store']);
+        Route::post('/beneficiary-distributions/{id}/notify', [BeneficiaryDistributionController::class, 'notify']);
+        Route::delete('/beneficiary-distributions/{id}', [BeneficiaryDistributionController::class, 'destroy']);
     });
 });
