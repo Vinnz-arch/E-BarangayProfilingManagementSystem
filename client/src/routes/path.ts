@@ -19,5 +19,6 @@ export const PATHS = {
     BARANGAYOFFICIALS: `${APP_ROOT}/barangayofficials`,
     DOCUMENT_REQUESTS: `${APP_ROOT}/document-requests`,
     ANNOUNCEMENTS: `${APP_ROOT}/announcements`,
+    DISASTER_READINESS: `${APP_ROOT}/disaster-readiness`,
   },
 };

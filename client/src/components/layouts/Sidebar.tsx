@@ -87,6 +87,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           icon: "FaBullhorn",
           path: PATHS.APP.ANNOUNCEMENTS,
         },
+        {
+          name: "Disaster Alerts",
+          icon: "FaTowerBroadcast",
+          path: PATHS.APP.DISASTER_READINESS,
+        },
       ],
     },
   ];

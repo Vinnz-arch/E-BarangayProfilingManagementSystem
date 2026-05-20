@@ -9,8 +9,14 @@ use App\Http\Controllers\API\v1\DocumentRequestController;
 use App\Http\Controllers\API\v1\OfficialController;
 use App\Http\Controllers\API\v1\AuthController;
 use App\Http\Controllers\API\v1\BeneficiaryExportController;
+use App\Http\Controllers\API\v1\N8nController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// n8n integration routes (No Sanctum token required for local n8n access)
+Route::prefix('n8n')->group(function () {
+    Route::get('/residents', [N8nController::class, 'getResidents']);
+});
 
 Route::prefix('v1')->group(function () {
     // Public routes
@@ -57,6 +63,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/announcements', [AnnouncementController::class, 'index']);
         Route::post('/announcements', [AnnouncementController::class, 'store']);
         Route::delete('/announcements/{id}', [AnnouncementController::class, 'destroy']);
+
+        // Emergency Broadcast Route (Server-side to n8n)
+        Route::post('/emergency-broadcast', [N8nController::class, 'triggerEmergencyBroadcast']);
 
         // Beneficiary Distribution Routes
         Route::get('/beneficiary-distributions', [BeneficiaryDistributionController::class, 'index']);
